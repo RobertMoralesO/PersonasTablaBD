@@ -7,7 +7,12 @@ package interfaz;
 
 import clases.Helper;
 import clases.Persona;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,13 +24,25 @@ public class Agregar extends javax.swing.JDialog {
     /**
      * Creates new form Agregar
      */
+    
+    String ruta;
+    ObjectOutputStream salida;
     ArrayList<Persona> personas;
 
     public Agregar(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        initComponents();
-        personas = new ArrayList();
+        try {
+            initComponents();
+            ruta = "src/datos/personas.txt";
+            personas = Helper.traerDatos(ruta);
+            salida = new ObjectOutputStream(new FileOutputStream(ruta));
+            Helper.volcado(salida, personas);
+            Helper.llenadoTabla(tblPersonas, ruta);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());  
+        }
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -149,17 +166,22 @@ public class Agregar extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmdAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAgregarActionPerformed
-        String cedula, nombre, apellido;
-        cedula = txtCedula.getText();
-        nombre = txtNombre.getText();
-        apellido = txtApellido.getText();
-        Persona p = new Persona(cedula, nombre, apellido);
-        personas.add(p);
-        Helper.llenadoTabla(tblPersonas, personas);
-        txtNombre.setText("");
-        txtCedula.setText("");
-        txtApellido.setText("");
-        txtCedula.requestFocusInWindow();
+        try {
+            String cedula, nombre, apellido;
+            cedula = txtCedula.getText();
+            nombre = txtNombre.getText();
+            apellido = txtApellido.getText();
+            Persona p = new Persona(cedula, nombre, apellido);
+            //personas.add(p);
+            p.guardar(salida);
+            Helper.llenadoTabla(tblPersonas, ruta);
+            txtNombre.setText("");
+            txtCedula.setText("");
+            txtApellido.setText("");
+            txtCedula.requestFocusInWindow();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage()); 
+        }
 
 
     }//GEN-LAST:event_cmdAgregarActionPerformed
@@ -194,7 +216,7 @@ public class Agregar extends javax.swing.JDialog {
 
             i = tblPersonas.getSelectedRow();
             personas.remove(i);
-            Helper.llenadoTabla(tblPersonas, personas);
+            Helper.llenadoTabla(tblPersonas, ruta);
             txtNombre.setText("");
             txtCedula.setText("");
             txtApellido.setText("");

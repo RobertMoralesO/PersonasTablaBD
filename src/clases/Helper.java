@@ -5,8 +5,16 @@
  */
 package clases;
 
+import interfaz.Agregar;
 import java.awt.Component;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -279,9 +287,10 @@ public class Helper {
         return aux;
     }
     
-    public static void llenadoTabla(JTable tabla, ArrayList<Persona> personas){
+    public static void llenadoTabla(JTable tabla, String ruta){
         int nf;
         DefaultTableModel tm;
+        ArrayList<Persona> personas = traerDatos(ruta);
         tm = (DefaultTableModel)tabla.getModel();
         nf = personas.size();
         tm.setRowCount(nf);
@@ -295,5 +304,38 @@ public class Helper {
         }
         
     }
+    
+    public static ArrayList traerDatos(String ruta){
+        FileInputStream archivo;
+            ObjectInputStream entrada;
+            ArrayList personas = new ArrayList();
+            Object p;
+        try {
+            archivo = new FileInputStream(ruta);
+            entrada = new ObjectInputStream(archivo);
+            while((p=entrada.readObject())!=null){
+                personas.add(p);
+            }
+            
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.getMessage());        
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Helper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+       return personas;
 
+    }
+    public static void volcado(ObjectOutputStream salida, ArrayList personas){
+        for (int i = 0; i < personas.size(); i++) {
+            try {
+                salida.writeObject(personas.get(i));
+            } catch (IOException ex) {
+                Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+    }
 }
