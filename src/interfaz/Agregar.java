@@ -7,6 +7,7 @@ package interfaz;
 
 import clases.Helper;
 import clases.Persona;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -37,6 +38,7 @@ public class Agregar extends javax.swing.JDialog {
             personas = Helper.traerDatos(ruta);
             salida = new ObjectOutputStream(new FileOutputStream(ruta));
             Helper.volcado(salida, personas);
+            Helper.limpiarTabla(tblPersonas);
             Helper.llenadoTabla(tblPersonas, ruta);
         } catch (IOException ex) {
             System.out.println(ex.getMessage());  
@@ -172,7 +174,6 @@ public class Agregar extends javax.swing.JDialog {
             nombre = txtNombre.getText();
             apellido = txtApellido.getText();
             Persona p = new Persona(cedula, nombre, apellido);
-            //personas.add(p);
             p.guardar(salida);
             Helper.llenadoTabla(tblPersonas, ruta);
             txtNombre.setText("");
@@ -197,6 +198,7 @@ public class Agregar extends javax.swing.JDialog {
     private void tblPersonasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPersonasMouseClicked
         Persona p;
         int i;
+        personas = Helper.traerDatos(ruta);
         i = tblPersonas.getSelectedRow();
         p = personas.get(i);
 
@@ -214,13 +216,21 @@ public class Agregar extends javax.swing.JDialog {
 
         if (op == JOptionPane.YES_OPTION) {
 
-            i = tblPersonas.getSelectedRow();
-            personas.remove(i);
-            Helper.llenadoTabla(tblPersonas, ruta);
-            txtNombre.setText("");
-            txtCedula.setText("");
-            txtApellido.setText("");
-            txtCedula.requestFocusInWindow();
+            try {
+                i = tblPersonas.getSelectedRow();
+                personas.remove(i);
+                salida = new ObjectOutputStream(new FileOutputStream(ruta));
+                Helper.volcado(salida, personas);
+                Helper.llenadoTabla(tblPersonas, ruta);
+                txtNombre.setText("");
+                txtCedula.setText("");
+                txtApellido.setText("");
+                txtCedula.requestFocusInWindow();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }//GEN-LAST:event_cmdEliminarActionPerformed
