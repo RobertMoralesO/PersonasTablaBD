@@ -5,6 +5,11 @@
  */
 package interfaz;
 
+import clases.Helper;
+import clases.Persona;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
 /**
  *
  * @author rmorales1
@@ -14,8 +19,11 @@ public class Principal extends javax.swing.JFrame {
     /**
      * Creates new form Principal
      */
+    String ruta;
+  
     public Principal() {
         initComponents();
+         ruta = "src/datos/personas.txt";
     }
 
     /**
@@ -31,8 +39,10 @@ public class Principal extends javax.swing.JFrame {
         lblImagen = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         MnOpciones = new javax.swing.JMenu();
-        MnAgregar = new javax.swing.JMenuItem();
-        MnReportes = new javax.swing.JMenuItem();
+        mnAgregar = new javax.swing.JMenuItem();
+        mnReportes = new javax.swing.JMenu();
+        mnListadoSexo = new javax.swing.JMenuItem();
+        mnNumerodePersonas = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         MnSalir = new javax.swing.JMenuItem();
 
@@ -46,17 +56,34 @@ public class Principal extends javax.swing.JFrame {
 
         MnOpciones.setText("Opciones");
 
-        MnAgregar.setText("Agregar");
-        MnAgregar.setToolTipText("");
-        MnAgregar.addActionListener(new java.awt.event.ActionListener() {
+        mnAgregar.setText("Agregar");
+        mnAgregar.setToolTipText("");
+        mnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MnAgregarActionPerformed(evt);
+                mnAgregarActionPerformed(evt);
             }
         });
-        MnOpciones.add(MnAgregar);
+        MnOpciones.add(mnAgregar);
 
-        MnReportes.setText("Reportes");
-        MnOpciones.add(MnReportes);
+        mnReportes.setText("Reportes");
+
+        mnListadoSexo.setText("Listado Por Sexo");
+        mnListadoSexo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnListadoSexoActionPerformed(evt);
+            }
+        });
+        mnReportes.add(mnListadoSexo);
+
+        mnNumerodePersonas.setText("Numero de Personas Ingresadas");
+        mnNumerodePersonas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnNumerodePersonasActionPerformed(evt);
+            }
+        });
+        mnReportes.add(mnNumerodePersonas);
+
+        MnOpciones.add(mnReportes);
         MnOpciones.add(jSeparator1);
 
         MnSalir.setText("Salir");
@@ -86,16 +113,30 @@ public class Principal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void MnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnAgregarActionPerformed
+    private void mnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnAgregarActionPerformed
         Agregar a = new Agregar(this,true);
         a.setVisible(true);
         
         
-    }//GEN-LAST:event_MnAgregarActionPerformed
+    }//GEN-LAST:event_mnAgregarActionPerformed
 
     private void MnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnSalirActionPerformed
        System.exit(0);      
     }//GEN-LAST:event_MnSalirActionPerformed
+
+    private void mnListadoSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnListadoSexoActionPerformed
+        ListadoPorSexo lps = new ListadoPorSexo(this, true);
+        lps.setVisible(true);
+    }//GEN-LAST:event_mnListadoSexoActionPerformed
+
+    private void mnNumerodePersonasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnNumerodePersonasActionPerformed
+       int cont;
+       cont = Helper.traerDatos(ruta).size();
+        Helper.mensaje(this,"El número de personas ingresadas es: "+cont , "No. de Personas Ingresadas", 1);
+        
+        
+        
+    }//GEN-LAST:event_mnNumerodePersonasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -133,13 +174,15 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem MnAgregar;
     private javax.swing.JMenu MnOpciones;
-    private javax.swing.JMenuItem MnReportes;
     private javax.swing.JMenuItem MnSalir;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel lblImagen;
+    private javax.swing.JMenuItem mnAgregar;
+    private javax.swing.JMenuItem mnListadoSexo;
+    private javax.swing.JMenuItem mnNumerodePersonas;
+    private javax.swing.JMenu mnReportes;
     // End of variables declaration//GEN-END:variables
 }

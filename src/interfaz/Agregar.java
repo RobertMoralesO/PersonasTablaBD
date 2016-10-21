@@ -25,7 +25,6 @@ public class Agregar extends javax.swing.JDialog {
     /**
      * Creates new form Agregar
      */
-    
     String ruta;
     ObjectOutputStream salida;
     ArrayList<Persona> personas;
@@ -41,10 +40,9 @@ public class Agregar extends javax.swing.JDialog {
             Helper.limpiarTabla(tblPersonas);
             Helper.llenadoTabla(tblPersonas, ruta);
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());  
+            System.out.println(ex.getMessage());
         }
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -181,11 +179,12 @@ public class Agregar extends javax.swing.JDialog {
 
     private void cmdAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAgregarActionPerformed
         try {
-            String cedula, nombre, apellido;
+            String cedula, nombre, apellido, sexo;
             cedula = txtCedula.getText();
             nombre = txtNombre.getText();
             apellido = txtApellido.getText();
-            Persona p = new Persona(cedula, nombre, apellido);
+            sexo = cmbSexo.getSelectedItem().toString();
+            Persona p = new Persona(cedula, nombre, apellido, sexo);
             p.guardar(salida);
             Helper.llenadoTabla(tblPersonas, ruta);
             txtNombre.setText("");
@@ -193,7 +192,7 @@ public class Agregar extends javax.swing.JDialog {
             txtApellido.setText("");
             txtCedula.requestFocusInWindow();
         } catch (IOException ex) {
-            System.out.println(ex.getMessage()); 
+            System.out.println(ex.getMessage());
         }
 
 
@@ -203,7 +202,7 @@ public class Agregar extends javax.swing.JDialog {
         txtNombre.setText("");
         txtCedula.setText("");
         txtApellido.setText("");
-
+        cmbSexo.setSelectedIndex(0);
         txtCedula.requestFocusInWindow();
     }//GEN-LAST:event_cmdLimpiarActionPerformed
 
@@ -217,7 +216,7 @@ public class Agregar extends javax.swing.JDialog {
         txtCedula.setText(p.getCedula());
         txtNombre.setText(p.getNombre());
         txtApellido.setText(p.getApellido());
-
+        cmbSexo.setSelectedItem(p.getSexo());
 
     }//GEN-LAST:event_tblPersonasMouseClicked
 
