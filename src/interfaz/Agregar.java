@@ -63,10 +63,13 @@ public class Agregar extends javax.swing.JDialog {
         txtNombre = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtApellido = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        cmbSexo = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         cmdAgregar = new javax.swing.JButton();
         cmdEliminar = new javax.swing.JButton();
         cmdLimpiar = new javax.swing.JButton();
+        cmdNuevo = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPersonas = new javax.swing.JTable();
@@ -91,7 +94,13 @@ public class Agregar extends javax.swing.JDialog {
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
         jPanel2.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 110, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 240, 110));
+        jLabel4.setText("Sexo:");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+
+        cmbSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino", "Indefinido" }));
+        jPanel2.add(cmbSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 110, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 240, 150));
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones"));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -102,7 +111,7 @@ public class Agregar extends javax.swing.JDialog {
                 cmdAgregarActionPerformed(evt);
             }
         });
-        jPanel3.add(cmdAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 100, -1));
+        jPanel3.add(cmdAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 100, -1));
 
         cmdEliminar.setText("Eliminar");
         cmdEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -110,7 +119,7 @@ public class Agregar extends javax.swing.JDialog {
                 cmdEliminarActionPerformed(evt);
             }
         });
-        jPanel3.add(cmdEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 100, -1));
+        jPanel3.add(cmdEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 100, -1));
 
         cmdLimpiar.setText("Limpiar");
         cmdLimpiar.addActionListener(new java.awt.event.ActionListener() {
@@ -118,9 +127,12 @@ public class Agregar extends javax.swing.JDialog {
                 cmdLimpiarActionPerformed(evt);
             }
         });
-        jPanel3.add(cmdLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 100, -1));
+        jPanel3.add(cmdLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 100, -1));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, 130, 110));
+        cmdNuevo.setText("Nuevo");
+        jPanel3.add(cmdNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 100, -1));
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, 130, 150));
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Personas"));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -130,11 +142,11 @@ public class Agregar extends javax.swing.JDialog {
 
             },
             new String [] {
-                "No.", "Cédula", "Nombre", "Apellido"
+                "No.", "Cédula", "Nombre", "Apellido", "Sexo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -148,22 +160,22 @@ public class Agregar extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tblPersonas);
 
-        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 360, 180));
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 400, 180));
 
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 390, 230));
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 440, 230));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(436, 414));
+        setSize(new java.awt.Dimension(531, 488));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -278,12 +290,15 @@ public class Agregar extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cmbSexo;
     private javax.swing.JButton cmdAgregar;
     private javax.swing.JButton cmdEliminar;
     private javax.swing.JButton cmdLimpiar;
+    private javax.swing.JButton cmdNuevo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
