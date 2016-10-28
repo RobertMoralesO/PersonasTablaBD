@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,6 +29,7 @@ public class Agregar extends javax.swing.JDialog {
     String ruta;
     ObjectOutputStream salida;
     ArrayList<Persona> personas;
+    int aux = 0;
 
     public Agregar(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -39,6 +41,11 @@ public class Agregar extends javax.swing.JDialog {
             Helper.volcado(salida, personas);
             Helper.limpiarTabla(tblPersonas);
             Helper.llenadoTabla(tblPersonas, ruta);
+            JButton botonesH[] = {cmdBuscar, cmdCancelar};
+            JButton botonesD[] = {cmdAgregar, cmdEliminar};
+            Helper.habilitarBotones(botonesH);
+            Helper.deshabilitarBotones(botonesD);
+
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
@@ -66,8 +73,8 @@ public class Agregar extends javax.swing.JDialog {
         jPanel3 = new javax.swing.JPanel();
         cmdAgregar = new javax.swing.JButton();
         cmdEliminar = new javax.swing.JButton();
-        cmdLimpiar = new javax.swing.JButton();
-        cmdNuevo = new javax.swing.JButton();
+        cmdCancelar = new javax.swing.JButton();
+        cmdBuscar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPersonas = new javax.swing.JTable();
@@ -103,7 +110,7 @@ public class Agregar extends javax.swing.JDialog {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones"));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        cmdAgregar.setText("Agregar");
+        cmdAgregar.setText("Guardar");
         cmdAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmdAgregarActionPerformed(evt);
@@ -119,16 +126,21 @@ public class Agregar extends javax.swing.JDialog {
         });
         jPanel3.add(cmdEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 100, -1));
 
-        cmdLimpiar.setText("Limpiar");
-        cmdLimpiar.addActionListener(new java.awt.event.ActionListener() {
+        cmdCancelar.setText("Cancelar");
+        cmdCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmdLimpiarActionPerformed(evt);
+                cmdCancelarActionPerformed(evt);
             }
         });
-        jPanel3.add(cmdLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 100, -1));
+        jPanel3.add(cmdCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 100, -1));
 
-        cmdNuevo.setText("Nuevo");
-        jPanel3.add(cmdNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 100, -1));
+        cmdBuscar.setText("Buscar");
+        cmdBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdBuscarActionPerformed(evt);
+            }
+        });
+        jPanel3.add(cmdBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 100, -1));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, 130, 150));
 
@@ -178,33 +190,52 @@ public class Agregar extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmdAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAgregarActionPerformed
+
         try {
             String cedula, nombre, apellido, sexo;
             cedula = txtCedula.getText();
             nombre = txtNombre.getText();
             apellido = txtApellido.getText();
             sexo = cmbSexo.getSelectedItem().toString();
-            Persona p = new Persona(cedula, nombre, apellido, sexo);
-            p.guardar(salida);
-            Helper.llenadoTabla(tblPersonas, ruta);
-            txtNombre.setText("");
-            txtCedula.setText("");
-            txtApellido.setText("");
-            txtCedula.requestFocusInWindow();
+            ArrayList<Persona> personasActualizado;
+
+            if (aux == 0) {
+
+                Persona p = new Persona(cedula, nombre, apellido, sexo);
+                p.guardar(salida);
+                Helper.llenadoTabla(tblPersonas, ruta);
+                txtNombre.setText("");
+                txtCedula.setText("");
+                txtApellido.setText("");
+                txtCedula.requestFocusInWindow();
+
+            } else {
+                personasActualizado = Helper.actualizarPersona(ruta, cedula, nombre, apellido, sexo);
+                salida = new ObjectOutputStream(new FileOutputStream(ruta));
+                Helper.volcado(salida, personasActualizado);
+                Helper.llenadoTabla(tblPersonas, ruta);
+                Helper.mensaje(this, "Datos actulizados exitosamente", "Correcto!", 1);
+
+                limpiar();
+
+            }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-
+            JButton botonesH[] = {cmdBuscar, cmdCancelar};
+            JButton botonesD[] = {cmdAgregar, cmdEliminar};
+            Helper.habilitarBotones(botonesH);
+            Helper.deshabilitarBotones(botonesD);
 
     }//GEN-LAST:event_cmdAgregarActionPerformed
 
-    private void cmdLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLimpiarActionPerformed
-        txtNombre.setText("");
-        txtCedula.setText("");
-        txtApellido.setText("");
-        cmbSexo.setSelectedIndex(0);
-        txtCedula.requestFocusInWindow();
-    }//GEN-LAST:event_cmdLimpiarActionPerformed
+    private void cmdCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelarActionPerformed
+        limpiar();
+            JButton botonesH[] = {cmdBuscar, cmdCancelar};
+            JButton botonesD[] = {cmdAgregar, cmdEliminar};
+            Helper.habilitarBotones(botonesH);
+            Helper.deshabilitarBotones(botonesD);
+    }//GEN-LAST:event_cmdCancelarActionPerformed
 
     private void tblPersonasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPersonasMouseClicked
         Persona p;
@@ -217,12 +248,16 @@ public class Agregar extends javax.swing.JDialog {
         txtNombre.setText(p.getNombre());
         txtApellido.setText(p.getApellido());
         cmbSexo.setSelectedItem(p.getSexo());
-
+        aux = 1;
+         JButton botonesH[] = {cmdEliminar, cmdAgregar, cmdCancelar};
+            JButton botonesD[] = {cmdBuscar};
+            Helper.habilitarBotones(botonesH);
+            Helper.deshabilitarBotones(botonesD);
     }//GEN-LAST:event_tblPersonasMouseClicked
 
     private void cmdEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdEliminarActionPerformed
         int i, op;
-
+       
         op = JOptionPane.showConfirmDialog(this, "¿Seguro que desea eliminar?", "Eliminar", JOptionPane.YES_NO_OPTION);
 
         if (op == JOptionPane.YES_OPTION) {
@@ -244,7 +279,45 @@ public class Agregar extends javax.swing.JDialog {
             }
         }
 
+            JButton botonesH[] = {cmdBuscar, cmdCancelar};
+            JButton botonesD[] = {cmdAgregar, cmdEliminar};
+            Helper.habilitarBotones(botonesH);
+            Helper.deshabilitarBotones(botonesD);
     }//GEN-LAST:event_cmdEliminarActionPerformed
+
+    private void cmdBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBuscarActionPerformed
+        String cedula;
+        cedula = txtCedula.getText();
+       
+        
+        if (Helper.buscarPorCedula(cedula, ruta)) {
+            Persona p = Helper.traerPersona(cedula, ruta);
+            txtNombre.setText(p.getNombre());
+            txtApellido.setText(p.getApellido());
+            cmbSexo.setSelectedItem(p.getSexo());
+            aux = 1;
+           
+        } else {
+            txtNombre.requestFocusInWindow();
+            aux = 0;
+           
+        }
+        
+            JButton botonesH[] = {cmdAgregar, cmdCancelar};
+            JButton botonesD[] = {cmdBuscar, cmdEliminar};
+            Helper.habilitarBotones(botonesH);
+            Helper.deshabilitarBotones(botonesD);
+        
+    }//GEN-LAST:event_cmdBuscarActionPerformed
+
+    public void limpiar() {
+        txtNombre.setText("");
+        txtCedula.setText("");
+        txtApellido.setText("");
+        cmbSexo.setSelectedIndex(0);
+        txtCedula.requestFocusInWindow();
+        aux = 0;
+    }
 
     /**
      * @param args the command line arguments
@@ -291,9 +364,9 @@ public class Agregar extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbSexo;
     private javax.swing.JButton cmdAgregar;
+    private javax.swing.JButton cmdBuscar;
+    private javax.swing.JButton cmdCancelar;
     private javax.swing.JButton cmdEliminar;
-    private javax.swing.JButton cmdLimpiar;
-    private javax.swing.JButton cmdNuevo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
