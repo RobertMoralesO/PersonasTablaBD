@@ -415,11 +415,32 @@ public class Helper {
         return false;
     }
     
+    public static boolean buscarPorPlaca(String placa, String ruta){
+        ArrayList<Carro> carros = traerDatos(ruta);
+        for (int i = 0; i < carros.size(); i++) {
+            if(carros.get(i).getPlaca().equals(placa)){
+                return true;
+            }
+            
+        }
+        return false;
+    }
+    
     public static Persona traerPersona(String cedula,String ruta){
         ArrayList<Persona> personas = traerDatos(ruta);
         for (int i = 0; i < personas.size(); i++) {
             if(personas.get(i).getCedula().equals(cedula)){
                 return personas.get(i);
+            }
+            
+        }
+        return null;
+    }
+     public static Carro traerCarro(String placa,String ruta){
+        ArrayList<Carro> carros = traerDatos(ruta);
+        for (int i = 0; i < carros.size(); i++) {
+            if(carros.get(i).getPlaca().equals(placa)){
+                return carros.get(i);
             }
             
         }
@@ -439,6 +460,18 @@ public class Helper {
         return personas;
     }
     
+    public static ArrayList<Carro> actualizarCarro(String ruta,String placa, Persona propietario){
+        ArrayList<Carro> carros = traerDatos(ruta);
+        for (int i = 0; i < carros.size(); i++) {
+          if(carros.get(i).getPlaca().equals(placa)){
+               carros.get(i).setPlaca(placa);
+               carros.get(i).setPropietario(propietario);
+                i=carros.size();
+            }
+        }
+        return carros;
+    }
+    
     public static ArrayList<Persona> actualizarPersona(String ruta, Persona p){
         ArrayList<Persona> personas = traerDatos(ruta);
         for (int i = 0; i < personas.size(); i++) {
@@ -450,6 +483,19 @@ public class Helper {
             }
         }
         return personas;
+    }
+    
+    public static ArrayList<Carro> actualizarCarro(String ruta, Carro c){
+        ArrayList<Carro> carros = traerDatos(ruta);
+        for (int i = 0; i < carros.size(); i++) {
+          if(carros.get(i).getPlaca().equals(c.getPlaca())){
+                carros.get(i).setPlaca(c.getPlaca());
+                carros.get(i).setPropietario(c.getPropietario());
+               
+                i=carros.size();
+            }
+        }
+        return carros;
     }
     
     public static void llenarComboPersonas(JComboBox combo, String ruta){

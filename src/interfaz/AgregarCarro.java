@@ -38,18 +38,18 @@ public class AgregarCarro extends javax.swing.JDialog {
             initComponents();
             rutaP = "src/datos/personas.txt";
             rutaC = "src/datos/carros.txt";
-            
+
             carros = Helper.traerDatos(rutaC);
-            
+
             Helper.llenarComboPersonas(cmbPropietario, rutaP);
-           
-           salida = new ObjectOutputStream(new FileOutputStream(rutaC));
+
+            salida = new ObjectOutputStream(new FileOutputStream(rutaC));
             Helper.volcado(salida, carros);
             Helper.limpiarTabla(tblCarros);
             Helper.llenadoTablaCarros(tblCarros, rutaC);
-            
-            JButton botonesH[] = {cmdBuscar, cmdCancelar,cmdAgregar};
-            JButton botonesD[] = { cmdEliminar};
+
+            JButton botonesH[] = {cmdBuscar, cmdCancelar};
+            JButton botonesD[] = {cmdAgregar,cmdEliminar};
             Helper.habilitarBotones(botonesH);
             Helper.deshabilitarBotones(botonesD);
 
@@ -116,9 +116,19 @@ public class AgregarCarro extends javax.swing.JDialog {
         jPanel3.add(cmdEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 100, -1));
 
         cmdCancelar.setText("Cancelar");
+        cmdCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdCancelarActionPerformed(evt);
+            }
+        });
         jPanel3.add(cmdCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 100, -1));
 
         cmdBuscar.setText("Buscar");
+        cmdBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdBuscarActionPerformed(evt);
+            }
+        });
         jPanel3.add(cmdBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 100, -1));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 30, 130, 150));
@@ -140,6 +150,11 @@ public class AgregarCarro extends javax.swing.JDialog {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblCarros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCarrosMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblCarros);
@@ -164,25 +179,108 @@ public class AgregarCarro extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmdAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAgregarActionPerformed
+
         try {
-            String placa, aux, cedula;
+            String placa, auxPropietario, cedula;
             Persona propietario;
             Carro c;
             int indice;
             placa = txtPlaca.getText();
-            aux = cmbPropietario.getSelectedItem().toString();
-            indice= aux.indexOf("-")-1;
-            cedula = aux.substring(0, indice);
+            auxPropietario = cmbPropietario.getSelectedItem().toString();
+            indice = auxPropietario.indexOf("-") - 1;
+            cedula = auxPropietario.substring(0, indice);
             propietario = Helper.traerPersona(cedula, rutaP);
-            c = new Carro(placa, propietario);
-            c.guardar(salida);
-            Helper.llenadoTablaCarros(tblCarros, rutaC);
+            ArrayList<Carro> carrosActualizado;
+
+            if (aux == 0) {
+
+                c = new Carro(placa, propietario);
+                c.guardar(salida);
+                Helper.llenadoTablaCarros(tblCarros, rutaC);
+                txtPlaca.setText("");
+                cmbPropietario.setSelectedIndex(0);
+                txtPlaca.requestFocusInWindow();
+
+            } else {
+                carrosActualizado = Helper.actualizarCarro(rutaC, placa, propietario);
+                salida = new ObjectOutputStream(new FileOutputStream(rutaC));
+                Helper.volcado(salida, carrosActualizado);
+                Helper.llenadoTablaCarros(tblCarros, rutaC);
+                Helper.mensaje(this, "Datos actulizados exitosamente", "Correcto!", 1);
+
+                limpiar();
+
+            }
         } catch (IOException ex) {
-            Logger.getLogger(AgregarCarro.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
         }
-       
+        JButton botonesH[] = {cmdBuscar, cmdCancelar};
+        JButton botonesD[] = {cmdAgregar, cmdEliminar};
+        Helper.habilitarBotones(botonesH);
+        Helper.deshabilitarBotones(botonesD);
+
     }//GEN-LAST:event_cmdAgregarActionPerformed
 
+    private void tblCarrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCarrosMouseClicked
+        String auxPropietario;
+        Carro c;
+        Persona p;
+        int i;
+        carros = Helper.traerDatos(rutaC);
+        i = tblCarros.getSelectedRow();
+        c = carros.get(i);
+
+        txtPlaca.setText(c.getPlaca());
+        p = c.getPropietario();
+        auxPropietario = p.getCedula() + " - " + p.getNombre() + " " + p.getApellido();
+
+        cmbPropietario.setSelectedItem(auxPropietario);
+        aux = 1;
+        JButton botonesH[] = {cmdEliminar, cmdAgregar, cmdCancelar};
+        JButton botonesD[] = {cmdBuscar};
+        Helper.habilitarBotones(botonesH);
+        Helper.deshabilitarBotones(botonesD);
+    }//GEN-LAST:event_tblCarrosMouseClicked
+
+    private void cmdBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBuscarActionPerformed
+        String placa, auxPropietario;
+        placa = txtPlaca.getText();
+        Persona p;
+
+        if (Helper.buscarPorPlaca(placa, rutaC)) {
+            Carro c = Helper.traerCarro(placa, rutaC);
+            txtPlaca.setText(c.getPlaca());
+            p = c.getPropietario();
+            auxPropietario = p.getCedula() + " - " + p.getNombre() + " " + p.getApellido();
+            cmbPropietario.setSelectedItem(auxPropietario);
+            aux = 1;
+
+        } else {
+            txtPlaca.requestFocusInWindow();
+            aux = 0;
+
+        }
+
+        JButton botonesH[] = {cmdAgregar, cmdCancelar};
+        JButton botonesD[] = {cmdBuscar, cmdEliminar};
+        Helper.habilitarBotones(botonesH);
+        Helper.deshabilitarBotones(botonesD);
+    }//GEN-LAST:event_cmdBuscarActionPerformed
+
+    private void cmdCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelarActionPerformed
+         limpiar();
+            JButton botonesH[] = {cmdBuscar, cmdCancelar};
+            JButton botonesD[] = {cmdAgregar, cmdEliminar};
+            Helper.habilitarBotones(botonesH);
+            Helper.deshabilitarBotones(botonesD);
+    }//GEN-LAST:event_cmdCancelarActionPerformed
+
+    public void limpiar() {
+        txtPlaca.setText("");
+        cmbPropietario.setSelectedIndex(0);
+        txtPlaca.requestFocusInWindow();
+        aux = 0;
+    }
 
     /**
      * @param args the command line arguments
