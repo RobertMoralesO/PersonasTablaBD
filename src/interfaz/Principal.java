@@ -39,12 +39,15 @@ public class Principal extends javax.swing.JFrame {
         lblImagen = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         MnOpciones = new javax.swing.JMenu();
-        mnAgregar = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        MnSalir = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        mnAgregarPersonas = new javax.swing.JMenuItem();
         mnReportes = new javax.swing.JMenu();
         mnListadoSexo = new javax.swing.JMenuItem();
         mnNumerodePersonas = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        MnSalir = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        mnAgregarCarros = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("PERSONAS");
@@ -55,15 +58,28 @@ public class Principal extends javax.swing.JFrame {
         jPanel1.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(4, 4, 730, 390));
 
         MnOpciones.setText("Opciones");
+        MnOpciones.add(jSeparator1);
 
-        mnAgregar.setText("Agregar");
-        mnAgregar.setToolTipText("");
-        mnAgregar.addActionListener(new java.awt.event.ActionListener() {
+        MnSalir.setText("Salir");
+        MnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnAgregarActionPerformed(evt);
+                MnSalirActionPerformed(evt);
             }
         });
-        MnOpciones.add(mnAgregar);
+        MnOpciones.add(MnSalir);
+
+        jMenuBar1.add(MnOpciones);
+
+        jMenu1.setText("Personas");
+
+        mnAgregarPersonas.setText("Agregar");
+        mnAgregarPersonas.setToolTipText("");
+        mnAgregarPersonas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnAgregarPersonasActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnAgregarPersonas);
 
         mnReportes.setText("Reportes");
 
@@ -83,18 +99,21 @@ public class Principal extends javax.swing.JFrame {
         });
         mnReportes.add(mnNumerodePersonas);
 
-        MnOpciones.add(mnReportes);
-        MnOpciones.add(jSeparator1);
+        jMenu1.add(mnReportes);
 
-        MnSalir.setText("Salir");
-        MnSalir.addActionListener(new java.awt.event.ActionListener() {
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Carros");
+
+        mnAgregarCarros.setText("Agregar");
+        mnAgregarCarros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MnSalirActionPerformed(evt);
+                mnAgregarCarrosActionPerformed(evt);
             }
         });
-        MnOpciones.add(MnSalir);
+        jMenu2.add(mnAgregarCarros);
 
-        jMenuBar1.add(MnOpciones);
+        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -113,12 +132,12 @@ public class Principal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void mnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnAgregarActionPerformed
+    private void mnAgregarPersonasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnAgregarPersonasActionPerformed
         Agregar a = new Agregar(this,true);
         a.setVisible(true);
         
         
-    }//GEN-LAST:event_mnAgregarActionPerformed
+    }//GEN-LAST:event_mnAgregarPersonasActionPerformed
 
     private void MnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnSalirActionPerformed
        System.exit(0);      
@@ -137,6 +156,11 @@ public class Principal extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_mnNumerodePersonasActionPerformed
+
+    private void mnAgregarCarrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnAgregarCarrosActionPerformed
+      AgregarCarro ac = new AgregarCarro(this, true);
+      ac.setVisible(true);
+    }//GEN-LAST:event_mnAgregarCarrosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -176,11 +200,14 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu MnOpciones;
     private javax.swing.JMenuItem MnSalir;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel lblImagen;
-    private javax.swing.JMenuItem mnAgregar;
+    private javax.swing.JMenuItem mnAgregarCarros;
+    private javax.swing.JMenuItem mnAgregarPersonas;
     private javax.swing.JMenuItem mnListadoSexo;
     private javax.swing.JMenuItem mnNumerodePersonas;
     private javax.swing.JMenu mnReportes;

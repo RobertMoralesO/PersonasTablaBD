@@ -15,7 +15,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -304,6 +306,39 @@ public class Helper {
         }
         
     }
+    public static void llenadoTablaCarros(JTable tabla, String ruta){
+        int nf;
+        DefaultTableModel tm;
+        ArrayList<Carro> carros = traerDatos(ruta);
+        tm = (DefaultTableModel)tabla.getModel();
+        nf = carros.size();
+        tm.setRowCount(nf);
+        limpiarTabla(tabla);
+        for (int i = 0; i < nf; i++) {
+           tm.setValueAt(i+1, i, 0);
+           tm.setValueAt(carros.get(i).getPlaca(), i, 1);
+           tm.setValueAt(carros.get(i).getPropietario().getCedula(), i, 2);
+           tm.setValueAt(carros.get(i).getPropietario().getNombre(), i, 3);
+           tm.setValueAt(carros.get(i).getPropietario().getApellido(), i, 4);
+        }
+        
+    }
+    public static void llenadoTablaCarros(JTable tabla, ArrayList<Carro> carros){
+        int nf;
+        DefaultTableModel tm;
+        tm = (DefaultTableModel)tabla.getModel();
+        nf = carros.size();
+        tm.setRowCount(nf);
+        limpiarTabla(tabla);
+        for (int i = 0; i < nf; i++) {
+           tm.setValueAt(i+1, i, 0);
+           tm.setValueAt(carros.get(i).getPlaca(), i, 1);
+           tm.setValueAt(carros.get(i).getPropietario().getCedula(), i, 2);
+           tm.setValueAt(carros.get(i).getPropietario().getNombre(), i, 3);
+           tm.setValueAt(carros.get(i).getPropietario().getApellido(), i, 4);
+        }
+        
+    }
     
     public static void llenadoTabla(JTable tabla, ArrayList<Persona> personas){
         int nf;
@@ -345,10 +380,10 @@ public class Helper {
        return personas;
 
     }
-    public static void volcado(ObjectOutputStream salida, ArrayList personas){
-        for (int i = 0; i < personas.size(); i++) {
+    public static void volcado(ObjectOutputStream salida, ArrayList objetos){
+        for (int i = 0; i < objetos.size(); i++) {
             try {
-                salida.writeObject(personas.get(i));
+                salida.writeObject(objetos.get(i));
             } catch (IOException ex) {
                 Logger.getLogger(Agregar.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -415,6 +450,19 @@ public class Helper {
             }
         }
         return personas;
+    }
+    
+    public static void llenarComboPersonas(JComboBox combo, String ruta){
+        ArrayList<Persona> personas = traerDatos(ruta);
+        DefaultComboBoxModel dcbm = (DefaultComboBoxModel) combo.getModel();
+        dcbm.removeAllElements();
+        Persona p;
+        for (int i = 0; i < personas.size(); i++) {
+            p = personas.get(i);
+            dcbm.addElement(p.getCedula()+" - "+p.getNombre()+" "+p.getApellido());
+        }
+        
+        
     }
     
 }
